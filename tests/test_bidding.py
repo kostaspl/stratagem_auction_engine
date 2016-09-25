@@ -1,10 +1,11 @@
 import random
 import string
 import pytest
-from auctionengine import tracker
-from .test_tracker import random_name
+from auctionengine.tracker import SimpleTracker
+from .test_simpletracker import random_name
 
 def test_negative_zero_bid():
+   tracker = SimpleTracker()
    user = tracker.create_user(random_name(20))
    item = tracker.create_item(random_name(20))
 
@@ -19,6 +20,7 @@ def test_negative_zero_bid():
    assert item.get_winning_bid() is None
 
 def test_placing_bid():
+   tracker = SimpleTracker()
    user1 = tracker.create_user(random_name(20))
    user2 = tracker.create_user(random_name(20))
    item = tracker.create_item(random_name(20))
@@ -33,6 +35,7 @@ def test_placing_bid():
    assert len(item.bids) == valid_bids
 
 def test_winning_bid():
+   tracker = SimpleTracker()
    user = tracker.create_user(random_name(20))
    item = tracker.create_item(random_name(20))
 
@@ -44,6 +47,7 @@ def test_winning_bid():
    assert winning_bid.bidder == user
 
 def test_has_bid_on():
+   tracker = SimpleTracker()
    user = tracker.create_user(random_name(20))
    item = tracker.create_item(random_name(20))
 
@@ -53,6 +57,7 @@ def test_has_bid_on():
    assert user.has_bid_on(item) == True
 
 def test_is_highest_bidder():
+   tracker = SimpleTracker()
    user1 = tracker.create_user(random_name(20))
    user2 = tracker.create_user(random_name(20))
    item = tracker.create_item(random_name(20))
@@ -67,6 +72,7 @@ def test_is_highest_bidder():
    assert user2.is_highest_bidder(item) == True
 
 def test_items_user_has_bid():
+   tracker = SimpleTracker()
    user = tracker.create_user(random_name(20))
    item = tracker.create_item(random_name(20))
 
@@ -77,46 +83,4 @@ def test_items_user_has_bid():
 
    user.bid_on(item, 2)
    assert len(user.items_bid) == 1
-
-def test_bidding_process():
-   user1 = tracker.create_user(random_name(20))
-   user2 = tracker.create_user(random_name(20))
-   item = tracker.create_item(random_name(20))
-
-   assert len(item.bids) == 0
-   assert user1.has_bid_on(item) == False
-   assert user1.is_highest_bidder(item) == False
-   assert user1.bid_on(item, 10) == True
-   assert len(item.bids) == 1
-   assert len(user1.items_bid) == 1
-   assert user1.has_bid_on(item) == True
-   assert user1.is_highest_bidder(item) == True
-
-   winning_bid1 = item.get_winning_bid()
-
-   assert winning_bid1.bidder == user1
-   assert winning_bid1.price == 10
-   assert len(user1.items_bid) == 1
    
-   assert user2.bid_on(item, 10) == False
-   assert len(item.bids) == 1
-   assert len(user2.items_bid) == 0
-   assert user2.has_bid_on(item) == False
-
-   assert user2.bid_on(item, 11) == True
-   assert len(item.bids) == 2
-   assert len(user2.items_bid) == 1
-   assert user2.has_bid_on(item) == True
-   assert user1.is_highest_bidder(item) == False
-   assert user2.is_highest_bidder(item) == True
-
-   winning_bid2 = item.get_winning_bid()
-
-   assert winning_bid2.bidder == user2
-   assert winning_bid2.price == 11
-
-   assert user1.bid_on(item, 12) == True
-   assert len(item.bids) == 3
-   assert len(user1.items_bid) == 1
-   assert user2.is_highest_bidder(item) == False
-   assert user1.is_highest_bidder(item) == True

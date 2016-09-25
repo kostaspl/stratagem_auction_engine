@@ -1,7 +1,9 @@
 import random
-from auctionengine import tracker, user, item, bid
+from auctionengine.tracker import SimpleTracker
 
 if __name__ == "__main__":
+    tracker = SimpleTracker()
+    
     tracker.create_item("iPhone")
     tracker.create_item("PlayStation")
     tracker.create_item("XBOX")
@@ -58,7 +60,6 @@ if __name__ == "__main__":
         print("Bids for", i.name)
         for b in i.bids:
             print("\t", b)
-            
 
     print("\nPrinting all items each user has bid on...")
     for u in tracker.users:
@@ -68,4 +69,3 @@ if __name__ == "__main__":
         print("{} has bid on:".format(u.name))
         for i in u.items_bid:
             print("\t", i.name)
-            

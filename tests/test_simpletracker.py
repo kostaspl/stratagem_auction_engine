@@ -1,13 +1,13 @@
 import random
 import string
 import pytest
-from auctionengine import tracker
+from auctionengine.tracker import SimpleTracker
 
 def random_name(length):
     return ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase) for i in range(length))
 
 def test_user_creation():
-    tracker.users = []
+    tracker = SimpleTracker()
     assert len(tracker.users) == 0
 
     user_names = [random_name(random.randint(1, 20)) for n in range(100)]
@@ -22,10 +22,8 @@ def test_user_creation():
     with pytest.raises(ValueError):
         tracker.create_user("")
 
-    tracker.users = []
-
 def test_item_creation():
-    tracker.items = []
+    tracker = SimpleTracker()
     assert len(tracker.items) == 0
 
     item_names = [random_name(random.randint(1, 20)) for n in range(100)]
@@ -39,5 +37,3 @@ def test_item_creation():
 
     with pytest.raises(ValueError):
         tracker.create_item("")
-
-    tracker.items = []

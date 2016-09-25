@@ -2,9 +2,8 @@ import random
 import string
 import pytest
 from auctionengine.bid import Bid
-from auctionengine.item import Item
 from auctionengine.user import User
-from .test_tracker import random_name
+from auctionengine.item import Item
 
 def test_invalid_bid():
    with pytest.raises(ValueError):
